@@ -41,6 +41,11 @@ http.createServer(function(request, response) {
     fs.exists(filename, function(exists){
         console.log(filename+" "+exists);
         if (!exists) { Response["404"](); return ; }
+    if (path.normalize(decodeURI(uri)) !== decodeURI(uri)) {
+        response.statusCode = 403;
+        response.end();
+        return;
+    }
         if (fs.statSync(filename).isDirectory()) { filename += '/index.html'; }
 
         fs.readFile(filename, "binary", function(err, file){
